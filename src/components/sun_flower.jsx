@@ -36,9 +36,9 @@ const SunFlower = () => {
       opacity: 1,
       transition: {
         type: "spring",
-        stiffness: 240,
-        damping: 18,
-        delay: 0.09 * index,
+        stiffness: 120,
+        damping: 10,
+        delay: 0.5 * index,
       },
     }),
   };
@@ -51,8 +51,8 @@ const SunFlower = () => {
       transition: {
         type: "spring",
         stiffness: 180,
-        damping: 14,
-        delay: 0.08 * petals + 0.2,
+        damping: 10,
+        delay: 0,
       },
     },
   };
@@ -62,7 +62,7 @@ const SunFlower = () => {
     visible: {
       scaleY: 1,
       opacity: 1,
-      transition: { duration: 0.6, delay: 0.08 * petals + 0.3 },
+      transition: { duration: 1.2, delay: 0.5 * petals },
     },
   };
 
@@ -71,16 +71,14 @@ const SunFlower = () => {
     visible: (d) => ({
       pathLength: 1,
       opacity: 1,
-      transition: { duration: 0.9, delay: 0.06 * petals + d },
+      transition: { duration: 1.2, delay: 0.5 * petals + d },
     }),
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const v = (new FormData(e.currentTarget).get("username") || "")
-      .toString()
-      .trim();
-    if (v) setName(v);
+    setName(e.currentTarget.username.value.trim());
+
     setAskName(false);
   };
 
@@ -89,123 +87,166 @@ const SunFlower = () => {
     setAskName(true);
   };
 
+  const download = () => {
+    alert("Funcionalidad en desarrollo");
+  };
+
+  const noTouch = () => {
+    alert(`No me toques ${name}, ahora tienes virus muajajaja`);
+  };
+
   return (
-    <div className="flex justify-center min-h-screen max-h-screen">
-      <div className="w-full max-w-4xl rounded-2xl bg-gray-600 flex flex-col">
+    <div className="flex justify-center min-h-screen max-h-screen -bg-linear-270 from-purple-900 via-pink-800 to-purple-900">
+      <div className="w-full max-w-3xl rounded-2xl bg-rose-100 flex flex-col">
         {/* Nombre */}
-        {name && (
-          <motion.g
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.07 * petals + 0.5 }}
-          >
-            <text
-              style={{ color: "#f6b801", textShadow: "2px 2px 2px #00000055" }}
-              className="font-bold text-5xl justify-center text-center flex pt-8 ml-2 mr-2"
+        <div className="block h-2">
+          {name && (
+            <motion.g
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                delay: 0.5 * petals + 0.5,
+                duration: 0.5,
+                type: "spring",
+                stiffness: 120,
+                damping: 1,
+              }}
             >
-              Hola, {name} este es tu girasol 🌻
-            </text>
-          </motion.g>
-        )}
+              <text
+                style={{
+                  color: "#f6b801",
+                  textShadow: "1px 2px 2px #000",
+                }}
+                className="font-bold text-3xl justify-center text-center flex pt-8 ml-2 mr-2"
+              >
+                Hola, {name} este es tu girasol 🌻
+              </text>
+            </motion.g>
+          )}
+        </div>
 
-        <svg viewBox={`0 50 ${size} ${size}`}>
-          {/* Tallo */}
-          <motion.rect
-            x={cx - 6}
-            y={cy + 40}
-            width={12}
-            height={170}
-            rx={3}
-            variants={stemVariants}
-            initial="hidden"
-            animate="visible"
-            fill="#3b8d2e"
-          />
-
-          {/* Hojas */}
-          <motion.path
-            d={`M ${cx - 6} ${cy + 125} q -80 -30 -110 30 q 40 -10 110 -30 z`}
-            fill="#4aa43a"
-            stroke="#3b8d2e"
-            strokeWidth={2}
-            variants={leafVariants}
-            initial="hidden"
-            animate="visible"
-            custom={0.4}
-          />
-          <motion.path
-            d={`M ${cx + 6} ${cy + 110} q 90 -30 120 35 q -45 -8 -120 -35 z`}
-            fill="#4aa43a"
-            stroke="#3b8d2e"
-            strokeWidth={2}
-            variants={leafVariants}
-            initial="hidden"
-            animate="visible"
-            custom={0.6}
-          />
-
-          {/* Pétalos */}
-          {petalsData.map(({ i, angleDeg, px, py }) => (
-            <motion.ellipse
-              key={i}
-              cx={px}
-              cy={py}
-              rx={petalRx}
-              ry={petalRy}
-              transform={`rotate(${angleDeg} ${px} ${py})`}
-              fill="#f6b800"
-              stroke="#d89a00"
-              strokeWidth={0.9}
-              variants={petalVariants}
-              initial="hidden"
-              animate="visible"
-              custom={i}
-            />
-          ))}
-
-          {/* Centro */}
-          <motion.circle
-            cx={cx}
-            cy={cy}
-            r={40}
-            fill="#6b3f14"
-            stroke="#4a2b0d"
-            strokeWidth={0.9}
-            variants={diskVariants}
-            initial="hidden"
-            animate="visible"
-          />
-
-          {/* Semillas */}
-          {Array.from({ length: 10 }).map((_, i) => {
-            const angle = (i * 137.5 * Math.PI) / 180;
-            const r = Math.sqrt(i) * 4.5;
-            const x = cx + r * Math.cos(angle) * 1.7;
-            const y = cy + r * Math.sin(angle) * 1.7;
-            return (
-              <circle
-                key={`seed-${_}`}
-                cx={x}
-                cy={y}
-                r={1.8}
-                fill="#3a220b"
-                opacity={0.55}
+        <svg viewBox={`0 20 ${size} ${size}`}>
+          {name && (
+            <>
+              {/* Tallo */}
+              <motion.rect
+                x={cx - 6}
+                y={cy + 40}
+                width={12}
+                height={190}
+                rx={3}
+                variants={stemVariants}
+                initial="hidden"
+                animate="visible"
+                fill="#3b8d20"
+                strokeWidth={1.5}
               />
-            );
-          })}
+
+              {/* Hojas */}
+              <motion.path
+                d={`M ${cx - 6} ${
+                  cy + 125
+                } q -80 -30 -110 30 q 40 -10 110 -30 z`}
+                fill="#4aa43a"
+                stroke="#3b8d2e"
+                strokeWidth={2}
+                variants={leafVariants}
+                initial="hidden"
+                animate="visible"
+                custom={0.4}
+              />
+              <motion.path
+                d={`M ${cx + 6} ${
+                  cy + 110
+                } q 90 -30 120 35 q -45 -8 -120 -35 z`}
+                fill="#4aa43a"
+                stroke="#3b8d2e"
+                strokeWidth={2}
+                variants={leafVariants}
+                initial="hidden"
+                animate="visible"
+                custom={0.6}
+              />
+
+              {/* Pétalos */}
+              {petalsData.map(({ i, angleDeg, px, py }) => (
+                <motion.ellipse
+                  key={i}
+                  cx={px}
+                  cy={py}
+                  rx={petalRx}
+                  ry={petalRy}
+                  transform={`rotate(${angleDeg} ${px} ${py})`}
+                  fill="#f6b800"
+                  stroke="#d89a00"
+                  strokeWidth={2}
+                  variants={petalVariants}
+                  initial="hidden"
+                  animate="visible"
+                  custom={i}
+                />
+              ))}
+
+              {/* Centro */}
+              <motion.circle
+                cx={cx}
+                cy={cy}
+                r={40}
+                fill="#6b3f14"
+                stroke="#4a2b0d"
+                strokeWidth={2}
+                variants={diskVariants}
+                initial="hidden"
+                animate="visible"
+              />
+
+              {/* Semillas */}
+              {Array.from({ length: 10 }).map((_, i) => {
+                const angle = (i * 137.5 * Math.PI) / 180;
+                const r = Math.sqrt(i) * 4.5;
+                const x = cx + r * Math.cos(angle) * 1.7;
+                const y = cy + r * Math.sin(angle) * 1.7;
+                return (
+                  <motion.circle
+                    key={_}
+                    cx={x}
+                    cy={y}
+                    r={2}
+                    fill="#3a220b"
+                    opacity={0.55}
+                    stroke="#1e0e03"
+                    strokeWidth={1.5}
+                    variants={diskVariants}
+                    initial="hidden"
+                    animate="visible"
+                  />
+                );
+              })}
+            </>
+          )}
         </svg>
 
         {/* Controles */}
-        <div className="flex pb-5 items-center justify-center gap-3 text-sm text-slate-600">
-          <span className="px-4 py-2 rounded-xl bg-slate-100">
+        <div className="pb-5 pt-10 flex gap-2 self-center text-sm text-slate-600">
+          <button
+            className="px-4 py-2 rounded-xl bg-slate-100"
+            onClick={noTouch}
+          >
             Pétalos: {petals}
-          </span>
+          </button>
 
           <button
             onClick={reset}
-            className="px-4 py-2  rounded-xl bg-yellow-300 hover:bg-yellow-400 text-slate-800 shadow-sm transition"
+            className="px-4 py-2 rounded-xl bg-yellow-300 hover:bg-yellow-400 text-slate-800 shadow-sm transition"
           >
             Cambiar nombre
+          </button>
+
+          <button
+            onClick={download}
+            className="px-4 py-2 rounded-xl bg-green-300 hover:bg-green-400 text-slate-800 shadow-sm transition"
+          >
+            Descargar
           </button>
         </div>
 
@@ -213,7 +254,7 @@ const SunFlower = () => {
         <AnimatePresence>
           {askName && (
             <motion.div
-              className="absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center rounded-2xl"
+              className="absolute inset-0 -bg-linear-270 from-purple-900 via-pink-800 to-purple-900  backdrop-blur-sm flex items-center justify-center rounded-2xl"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -238,15 +279,9 @@ const SunFlower = () => {
                   placeholder="Tu nombre"
                   className="w-full rounded-xl border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-400"
                   required
+                  maxLength={10}
                 />
                 <div className="mt-4 flex gap-2 justify-end">
-                  <button
-                    type="button"
-                    onClick={() => setAskName(false)}
-                    className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700"
-                  >
-                    Omitir
-                  </button>
                   <button
                     type="submit"
                     className="px-4 py-2 rounded-xl bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-semibold shadow"
