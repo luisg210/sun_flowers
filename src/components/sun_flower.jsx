@@ -98,7 +98,7 @@ const SunFlower = () => {
 
     // ajusta el tamaño del canvas al viewBox
     canvas.width = 1920;
-    canvas.height = 1280;
+    canvas.height = 1080;
 
     img.onload = () => {
       ctx.drawImage(img, 0, 0);
@@ -119,9 +119,9 @@ const SunFlower = () => {
 
   return (
     <div className="flex justify-center min-h-screen max-h-screen -bg-linear-270 from-purple-900 via-purple-800 to-purple-900">
-      <div className="w-full max-w-3xl rounded-2xl bg-rose-100 flex flex-col">
+      <div className="w-full max-w-3xl rounded-2xl bg-rose-100">
         {/* Nombre */}
-        <div className="block h-2 col-1">
+        <div className="block min-h-1/12">
           {name && (
             <motion.g
               initial={{ opacity: 0, y: -10 }}
