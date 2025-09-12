@@ -100,7 +100,7 @@ const SunFlower = () => {
     canvas.height = 1080;
 
     img.onload = () => {
-      ctx.drawImage(img, -150, 0);
+      ctx.drawImage(img, 350, 0);
       const pngFile = canvas.toDataURL("image/png");
       const link = document.createElement("a");
       link.download = `girasol_${name || "mi"}_.png`;
