@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { b } from "framer-motion/client";
 
 const SunFlower = () => {
   const [name, setName] = useState("");
   const [askName, setAskName] = useState(true);
   const inputRef = useRef(null);
+  const svgRef = useRef(null);
 
   useEffect(() => {
     if (askName && inputRef.current) inputRef.current.focus();
@@ -88,7 +90,27 @@ const SunFlower = () => {
   };
 
   const download = () => {
-    alert("Funcionalidad en desarrollo");
+    const svg = svgRef.current;
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const img = new Image();
+
+    // ajusta el tamaño del canvas al viewBox
+    canvas.width = 1920;
+    canvas.height = 1280;
+
+    img.onload = () => {
+      ctx.drawImage(img, 0, 0);
+      const pngFile = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.download = `girasol_${name || "mi"}_.png`;
+      link.href = pngFile;
+      link.click();
+    };
+    img.src =
+      "data:image/svg+xml;base64," +
+      btoa(unescape(encodeURIComponent(svgData)));
   };
 
   const noTouch = () => {
@@ -96,10 +118,10 @@ const SunFlower = () => {
   };
 
   return (
-    <div className="flex justify-center min-h-screen max-h-screen -bg-linear-270 from-purple-900 via-pink-800 to-purple-900">
+    <div className="flex justify-center min-h-screen max-h-screen -bg-linear-270 from-purple-900 via-purple-800 to-purple-900">
       <div className="w-full max-w-3xl rounded-2xl bg-rose-100 flex flex-col">
         {/* Nombre */}
-        <div className="block h-2">
+        <div className="block h-2 col-1">
           {name && (
             <motion.g
               initial={{ opacity: 0, y: -10 }}
@@ -125,7 +147,7 @@ const SunFlower = () => {
           )}
         </div>
 
-        <svg viewBox={`0 20 ${size} ${size}`}>
+        <svg ref={svgRef} viewBox={`0 20 ${size} ${size}`}>
           {name && (
             <>
               {/* Tallo */}
@@ -204,30 +226,63 @@ const SunFlower = () => {
               {Array.from({ length: 10 }).map((_, i) => {
                 const angle = (i * 137.5 * Math.PI) / 180;
                 const r = Math.sqrt(i) * 4.5;
-                const x = cx + r * Math.cos(angle) * 1.7;
-                const y = cy + r * Math.sin(angle) * 1.7;
+                const x = cx + r * Math.cos(angle) * 2.2;
+                const y = cy + r * Math.sin(angle) * 2.2;
                 return (
                   <motion.circle
                     key={_}
                     cx={x}
                     cy={y}
-                    r={2}
+                    r={0.01}
                     fill="#3a220b"
-                    opacity={0.55}
+                    opacity={0.01}
                     stroke="#1e0e03"
-                    strokeWidth={1.5}
+                    strokeWidth={1}
                     variants={diskVariants}
                     initial="hidden"
                     animate="visible"
                   />
                 );
               })}
+
+              <motion.text
+                x={cx}
+                y={cy + 5}
+                textAnchor="middle"
+                className={"font-bold text-3xl font-sans"}
+                fill={"#3a220f"}
+                opacity={0.7}
+                stroke={"#000"}
+                strokeWidth={0.5}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{
+                  delay: 0.5 * petals + 0.5,
+                  duration: 0.5,
+                  type: "spring",
+                  stiffness: 120,
+                  damping: 1,
+                }}
+              >
+                {name.substring(0, 1)}
+              </motion.text>
             </>
           )}
         </svg>
 
         {/* Controles */}
-        <div className="pb-5 pt-10 flex gap-2 self-center text-sm text-slate-600">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{
+            delay: 0.5 * petals + 2,
+            duration: 0.5,
+            type: "spring",
+            stiffness: 120,
+            damping: 1,
+          }}
+          className="absolute bottom-2 flex gap-2.5 pl-2 text-slate-600"
+        >
           <button
             className="px-4 py-2 rounded-xl bg-slate-100"
             onClick={noTouch}
@@ -248,13 +303,13 @@ const SunFlower = () => {
           >
             Descargar
           </button>
-        </div>
+        </motion.div>
 
         {/* Modal pedir nombre */}
         <AnimatePresence>
           {askName && (
             <motion.div
-              className="absolute inset-0 -bg-linear-270 from-purple-900 via-pink-800 to-purple-900  backdrop-blur-sm flex items-center justify-center rounded-2xl"
+              className="absolute inset-0 -bg-linear-270 from-purple-900 via-purple-800 to-purple-900  backdrop-blur-sm flex items-center justify-center rounded-2xl"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -279,7 +334,7 @@ const SunFlower = () => {
                   placeholder="Tu nombre"
                   className="w-full rounded-xl border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-400"
                   required
-                  maxLength={10}
+                  maxLength={20}
                 />
                 <div className="mt-4 flex gap-2 justify-end">
                   <button
