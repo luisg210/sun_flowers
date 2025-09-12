@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { b } from "framer-motion/client";
 
 const SunFlower = () => {
   const [name, setName] = useState("");
@@ -101,7 +100,7 @@ const SunFlower = () => {
     canvas.height = 1080;
 
     img.onload = () => {
-      ctx.drawImage(img, 0, 0);
+      ctx.drawImage(img, -150, 0);
       const pngFile = canvas.toDataURL("image/png");
       const link = document.createElement("a");
       link.download = `girasol_${name || "mi"}_.png`;
@@ -118,8 +117,8 @@ const SunFlower = () => {
   };
 
   return (
-    <div className="flex justify-center min-h-screen max-h-screen -bg-linear-270 from-purple-900 via-purple-800 to-purple-900">
-      <div className="w-full max-w-3xl rounded-2xl bg-rose-100">
+    <div className="flex justify-center min-h-screen max-h-screen -bg-linear-270 from-rose-200 via-rose-100 to-rose-200">
+      <div className="w-full max-w-3xl bg-rose-100">
         {/* Nombre */}
         <div className="block min-h-1/12">
           {name && (
@@ -283,33 +282,37 @@ const SunFlower = () => {
           }}
           className="absolute bottom-2 flex gap-2.5 pl-2 text-slate-600"
         >
-          <button
-            className="px-4 py-2 rounded-xl bg-slate-100"
-            onClick={noTouch}
-          >
-            Pétalos: {petals}
-          </button>
+          {name && (
+            <>
+              <button
+                className="px-4 py-2 rounded-xl bg-slate-100"
+                onClick={noTouch}
+              >
+                Pétalos: {petals}
+              </button>
 
-          <button
-            onClick={reset}
-            className="px-4 py-2 rounded-xl bg-yellow-300 hover:bg-yellow-400 text-slate-800 shadow-sm transition"
-          >
-            Cambiar nombre
-          </button>
+              <button
+                onClick={reset}
+                className="px-4 py-2 rounded-xl bg-yellow-300 hover:bg-yellow-400 text-slate-800 shadow-sm transition"
+              >
+                Cambiar nombre
+              </button>
 
-          <button
-            onClick={download}
-            className="px-4 py-2 rounded-xl bg-green-300 hover:bg-green-400 text-slate-800 shadow-sm transition"
-          >
-            Descargar
-          </button>
+              <button
+                onClick={download}
+                className="px-4 py-2 rounded-xl bg-green-300 hover:bg-green-400 text-slate-800 shadow-sm transition"
+              >
+                Descargar
+              </button>
+            </>
+          )}
         </motion.div>
 
         {/* Modal pedir nombre */}
         <AnimatePresence>
           {askName && (
             <motion.div
-              className="absolute inset-0 -bg-linear-270 from-purple-900 via-purple-800 to-purple-900  backdrop-blur-sm flex items-center justify-center rounded-2xl"
+              className="absolute inset-0 -bg-linear-270 from-rose-200 via-rose-100 to-rose-200  backdrop-blur-sm flex items-center justify-center rounded-2xl"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
