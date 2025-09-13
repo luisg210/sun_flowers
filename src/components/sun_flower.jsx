@@ -95,21 +95,25 @@ const SunFlower = () => {
     const ctx = canvas.getContext("2d");
     const img = new Image();
 
-    // ajusta el tamaño del canvas al viewBox
     canvas.width = 1920;
     canvas.height = 1080;
 
+    const svgBlob = new Blob([svgData], {
+      type: "image/svg+xml;charset=utf-8",
+    });
+    const url = URL.createObjectURL(svgBlob);
+
     img.onload = () => {
-      ctx.drawImage(img, 350, 0);
+      ctx.drawImage(img, 400, 0);
+      URL.revokeObjectURL(url);
       const pngFile = canvas.toDataURL("image/png");
       const link = document.createElement("a");
       link.download = `girasol_${name || "mi"}_.png`;
       link.href = pngFile;
       link.click();
     };
-    img.src =
-      "data:image/svg+xml;base64," +
-      btoa(unescape(encodeURIComponent(svgData)));
+
+    img.src = url;
   };
 
   const noTouch = () => {
@@ -244,9 +248,10 @@ const SunFlower = () => {
                 );
               })}
 
+              {/* Inicial nombre */}
               <motion.text
                 x={cx}
-                y={cy + 5}
+                y={cy + 10}
                 textAnchor="middle"
                 className={"font-bold text-3xl font-sans"}
                 fill={"#3a220f"}
